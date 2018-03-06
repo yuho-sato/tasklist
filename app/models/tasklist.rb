@@ -1,4 +1,4 @@
-class Tasklist < ApplicationRecord
+class TaskGroup < ApplicationRecord
   belongs_to :user
   
   validates :user_id, presence: true
