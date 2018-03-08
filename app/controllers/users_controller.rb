@@ -7,7 +7,9 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @tasklists = @user.tasklists.order('created_at DESC').page(params[:page])
+    if logged_in? && @user == current_user
+      @tasks = @user.tasks.order('created_at DESC').page(params[:page])
+    end
     counts(@user)
   end
 
@@ -27,19 +29,7 @@ class UsersController < ApplicationController
     end
   end
 
-class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
-
-  include SessionsHelper
-
   private
-
-  def require_user_logged_in
-    unless logged_in?
-      redirect_to login_url
-    end
-  end
-end
 
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
